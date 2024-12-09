@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert } from 'react-native';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -27,6 +27,35 @@ const App = () => {
     } else {
       alert('Please enter valid credentials!');
     }
+  };
+
+  const handleLogout = () => {
+    // Reset all states to initial values
+    setIsLoggedIn(false);
+    setUsername('');
+    setPassword('');
+    setCurrentIndex(0);
+    setLiked([]);
+    setDisliked([]);
+    setShowResults(false);
+  };
+
+  const confirmLogout = () => {
+    Alert.alert(
+      'Confirm Logout',
+      'Are you sure you want to log out?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Logout',
+          style: 'destructive',
+          onPress: handleLogout,
+        },
+      ]
+    );
   };
 
   const handleLike = () => {
@@ -122,6 +151,12 @@ const App = () => {
       >
         <Text style={styles.buttonText}>Back</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.logoutButton}
+        onPress={confirmLogout}
+      >
+        <Text style={styles.buttonText}>Logout</Text>
+      </TouchableOpacity>
     </View>
   );
 
@@ -195,6 +230,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
     alignSelf: 'center',
   },
+  logoutButton: {
+    backgroundColor: '#F44336',
+    padding: 15,
+    borderRadius: 5,
+    marginTop: 20,
+    alignSelf: 'center',
+  },
   buttonText: {
     color: '#fff',
     fontWeight: 'bold',
@@ -225,3 +267,4 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+});
