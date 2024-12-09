@@ -30,7 +30,6 @@ const App = () => {
   };
 
   const handleLogout = () => {
-    // Reset all states to initial values
     setIsLoggedIn(false);
     setUsername('');
     setPassword('');
