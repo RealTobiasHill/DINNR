@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 
 const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [liked, setLiked] = useState([]);
   const [disliked, setDisliked] = useState([]);
@@ -18,6 +21,14 @@ const App = () => {
     'Wendy\'s',
   ];
 
+  const handleLogin = () => {
+    if (username && password) {
+      setIsLoggedIn(true);
+    } else {
+      alert('Please enter valid credentials!');
+    }
+  };
+
   const handleLike = () => {
     const currentRestaurant = restaurants[currentIndex];
     setLiked([...liked, currentRestaurant]);
@@ -29,6 +40,30 @@ const App = () => {
     setDisliked([...disliked, currentRestaurant]);
     setCurrentIndex(currentIndex + 1);
   };
+
+  const renderLoginScreen = () => (
+    <View style={styles.centeredContainer}>
+      <Text style={styles.header}>Login</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Username"
+        placeholderTextColor="#999"
+        value={username}
+        onChangeText={setUsername}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        placeholderTextColor="#999"
+        secureTextEntry
+        value={password}
+        onChangeText={setPassword}
+      />
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
   const renderMainScreen = () => {
     if (currentIndex >= restaurants.length) {
@@ -92,7 +127,11 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-      {showResults ? renderResultsScreen() : renderMainScreen()}
+      {isLoggedIn
+        ? showResults
+          ? renderResultsScreen()
+          : renderMainScreen()
+        : renderLoginScreen()}
     </View>
   );
 };
@@ -114,10 +153,19 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 20,
   },
-  restaurantName: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+  input: {
+    width: '80%',
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    marginBottom: 15,
+    color: '#000',
+  },
+  loginButton: {
+    backgroundColor: '#2196F3',
+    padding: 15,
+    borderRadius: 5,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -151,6 +199,11 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  restaurantName: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
   },
   listContainer: {
     marginTop: 20,
